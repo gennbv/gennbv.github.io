@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="GenNBV: Generalizable Next-Best-View Policy for Active 3D Reconstruction">
+  <meta name="keywords" content="Active 3D Reconstruction, Next-Best-View, Policy">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GenNBV: Generalizable Next-Best-View Policy for Active 3D Reconstruction</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <!-- GoogleAPI
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">-->
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">GenNBV: Generalizable Next-Best-View Policy for Active 3D Reconstruction</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://xiao-chen.info/">Xiao Chen</a><sup>1,2</sup>,</span>
+            <span class="author-block">
+              <a href="https://quanyili.github.io/">Quanyi Li</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://tai-wang.github.io/">Tai Wang</a><sup>1</sup>,</span>
+            <span class="author-block">
+              <a href="https://oceanpang.github.io/">Jiangmiao Pang</a><sup>1*</sup>,</span>
+            <span class="author-block">
+              <a href="https://tianfan.info/">Tianfan Xue</a><sup>1,2</sup>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Shanghai AI Laboratory,</span>
+            <span class="author-block"><sup>2</sup>The Chinese University of Hong Kong</span>
+            <!-- <span class="author-block"><sup>*</sup>Corresponding Author</span> -->
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="./static/paper/gennbv.pdf"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <!-- <a href="https://arxiv.org/abs/2309.07918" -->
+                <a href="https://zjwzcx.github.io/gennbv/"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Video Link. -->
+              <span class="link-block">
+                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/zjwzcx/gennbv" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code (Coming Soon)</span>
+                  </a>
+              </span>
+              <!-- Dataset Link. -->
+              <span class="link-block">
+                <a class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>Data (Coming Soon)</span>
+                  </a>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <video id="teaser"               
+               controls
+               muted
+               preload
+               playsinline height="100%">
+        <source src="./static/videos/GenNBV_demo_v5.mp4"
+                type="video/mp4">
+      </video>
+    </div>
+      <!-- <h2 class="subtitle has-text-centered">
+        <span class="dnerf"> GenNBV </span>
+      </h2> -->
+  </div>
+</section>
+
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          While recent advances in neural radiance field enable realistic digitization for large-scale scenes, the image-capturing process is still time-consuming and labor-intensive. Previous works attempt to automate this process using the Next-Best-View (NBV) policy for active 3D reconstruction. However, the existing NBV policies heavily rely on hand-crafted criteria, limited action space, or per-scene optimized representations. These constraints limit their cross-dataset generalizability. To overcome them, we propose <u><b>GenNBV</b></u>, an end-to-end generalizable NBV policy. Our policy adopts a reinforcement learning (RL)-based framework and extends typical limited action space to 5D free space. It empowers our agent drone to scan from any viewpoint, and even interact with unseen geometries during training. To boost the cross-dataset generalizability, we also propose a novel multi-source state embedding, including geometric, semantic, and action representations. We establish a benchmark using the Isaac Gym simulator with the Houses3K and OmniObject3D datasets to evaluate this NBV policy. Experiments demonstrate that our policy achieves a 98.26% and 97.12% coverage ratio on unseen building-scale objects from these datasets, respectively, outperforming prior solutions.
+        </div>
+      </div>
+    </div>
+<!--     <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-centered">
+          <video id="replay-video"
+                 controls
+                 muted
+                 preload
+                 playsinline
+                 width="100%">
+            <source src="./static/videos/demo_editing_5.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div> -->
+    <!--/ Abstract. -->
+
+    <!-- Paper video. -->
+<!--     <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Video</h2>
+        <div class="publication-video">
+          <iframe src="./static/videos/teaser_gif.gif"
+                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div> -->
+    <!--/ Paper video. -->
+  </div>
+</section>
+
+
+
+<!-- 
+<section class="section">
+  <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+      <h3 class="title is-4">Framework Pipeline</h3>
+      </div>
+      <div class="content has-text-centered">
+        <img width="75%" src="./static/images/main_figure.jpg"">
+      </div>
+
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified">
+        The whole pipeline consists of two major components: the LLM Planner and the Unified Controller. The LLM planner takes language inputs and background scenario information as inputs and outputs multi-step plans in the form of a Chain of Contacts. The Unified Controller then executes task plans step-by-step and outputs interaction movements.
+        </div>
+      </div>
+    </div>
+
+      <div class="content has-text-centered">
+        <video id="replay-video"
+               controls
+               muted
+               preload
+               playsinline
+               width="75%">
+          <source src="./static/videos/scannet_long_demo.mp4"
+                  type="video/mp4">
+        <p>
+          The overview of UniHSI.
+        </p>
+        </video>
+      </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+
+
+<!-- <section class="section">
+  <div class="container is-max-desktop">
+    <h3 class="title is-4">Diverse Interactions with the Same Object</h3>
+    <div class="columns is-centered">
+      <div class="column">
+        <div class="content">
+          <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/multistep_sit_demo.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+      <div class="column">
+        <div class="columns is-centered">
+          <div class="column content">
+            <video id="matting-video" controls playsinline height="100%">
+              <source src="./static/videos/multistep_bed_demo.mp4"
+                      type="video/mp4">
+            </video>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+
+
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <h3 class="title is-4">Teaser</h3>
+      </div>
+      <!-- <div class="content has-text-centered">
+        <img width="95%" src="./static/images/exp_main_table.png"">
+      </div> -->
+
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified">
+          Figure 1. Teaser
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <h3 class="title is-4">Performance Comparison</h3>
+      </div>
+      <div class="content has-text-centered">
+        <img width="95%" src="./static/images/exp_main_table.png"">
+      </div>
+
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified">
+          Table 1. Evaluation results of Next-Best-View policies for active 3D reconstruction on <b>Houses3K</b> and the house category from <b>OmniObject3D</b> (cross-dataset generalization). 
+          The number of views is set to 30 and 20 for Houses3K and OmniObject3D, respectively.<br>
+          "<b>*</b>": the policy is trained with the Houses3K training set and evaluated with holdout Houses3K test set and OmniObject3D house category.<br>
+          "<b>†</b>": the policy heavily relies on optimized per-scene representation (NeRF), thus is directly trained and evaluated on testing objects.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <h3 class="title is-4">Non-house Categories</h3>
+      </div>
+      <div class="content has-text-centered">
+        <img width="95%" src="./static/images/exp_main_non_house.png">
+      </div>
+
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified">
+          Table 2. The cross-dataset generalization for non-house categories. We train the baseline Scan-RL and our GenNBV on Houses3K and generalize them to non-house categories from OmniObject3D and an indoor scene from Replica.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <h3 class="title is-4">Ablation Study</h3>
+    </div>
+
+    <div class="content has-text-centered">
+      <img width="60%" src="./static/images/exp_abl_repre.png"">
+    </div>
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified">
+          Table 2. Ablation studies of representation categories in our framework on unseen Houses3K test set.
+        </div>
+      </div>
+    </div>
+
+    <div class="content has-text-centered">
+      <img width="60%" src="./static/images/exp_abl_depth.png"">
+    </div>
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified">
+          Table 3. Ablation studies of depth-based representations on unseen Houses3K test set, where depth map is the only sensory source.
+        </div>
+      </div>
+    </div>
+
+    <div class="content has-text-centered">
+      <img width="55%" src="./static/images/exp_abl_obj.png"">
+    </div>
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified">
+          Table 4. Ablation studies of the number of training objects in our framework on unseen OmniObject3D house category.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{xiao2023unified,
+        author    = {Xiao, Zeqi and Wang, Tai and Wang, Jingbo and Cao, Jinkun and Dai, Bo and Lin, Dahua and Pang, Jiangmiao},
+        title     = {Unified Human-Scene Interaction via Prompted Chain-of-Contacts},
+        journal   = {Arxiv},
+        year      = {2023},
+      }
+    </code></pre>
+    <pre><code>@article</code></pre>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <h3 class="title is-4">Acknowledgement</h3>
+    <div class="content has-text-justified">
+      <p>
+        TODO.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <!-- <div class="content has-text-centered">
+      <a class="icon-link"
+         href="./static/paper/UniHSI.pdf">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="https://github.com/OpenRobotLab/UniHSI" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div> -->
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template/">Academic Project Page Template</a>
+            which was adopted from the <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a> project page.
+          </p>
+          <script type='text/javascript' id='clustrmaps' src='//cdn.clustrmaps.com/map_v2.js?cl=ffffff&w=a&t=tt&d=_Oc9F3kg19qBNmKgX28mdlmSyRKP3q24f-fNiCZ4qaE'></script>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
